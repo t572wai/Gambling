@@ -1,0 +1,60 @@
+アラート非推奨
+showDialog('タイトル','内容'[,function(){必要なら閉じるときの関数}]を推奨します
+
+
+BGM追加方法
+	BGMをBGMsにいれる
+	BGMのIDを決める(他と被らないように)
+	bgmNameに表示する名前をIDで追加(BGM.js)
+	bgmにurl(./BGMs/ファイル名)をIDで追加(BGM.js)
+	値段を決め、gambleに追加(Buy.js)
+	追加方法を決める
+		最初から -> buyMenuGamblesに追加(DisplayBuyMenu.js)
+		報酬などで買い物画面に -> addBuyMenuItemで追加(DisplayBuyMenu.js)
+		報酬などで直接 -> addBuyMenuItemで追加、boughtGamesに追加(DisplayBuyMenu.js,MainGamble.html)
+保存
+
+
+テーマ追加方法
+	画像表示する場合、Themesに画像を入れる
+	テーマのIDを決める(他と被らないように)
+	themeNameに表示する名前をIDで追加(Theme.js)
+	themeColorsに色の組み合わせをIDで追加(Theme.js)
+		{1:"文字色",
+		 2:"背景色",
+		 3:"トロフィ画面のロックされてるときの背景色",
+		 4:"ボタンの色",
+		 5:"ボタンのホバー時の色",
+		 6:"ボタン縁の色",
+		 7:"ロードhoverの色"}
+	themeImgに表示する画像のurl(./Themes/ファイル名)の組み合わせ(Theme.js)
+		{1:"背景画像"}
+		もし、表示しない箇所なら、"none"を入れる
+	値段を決め、gambleに追加(Buy.js)
+	追加方法を決める
+		最初から -> buyMenuGamblesに追加(DisplayBuyMenu.js)
+		報酬などで買い物画面に -> addBuyMenuItemで追加(DisplayBuyMenu.js)
+		報酬などで直接 -> (addBuyMenuItemで追加、)boughtGamesに追加(DisplayBuyMenu.js,MainGamble.html)
+保存
+
+
+トロフィー追加方法
+	IDを決める(他と被らないように)
+	(DisplayAchievementMenu.js)
+		achievementNameにIDでトロフィーの名前を追加
+		achievementPrizeにIDで報酬を決める 金->money:お金
+						金+新しいトロフィー ->M&A:お金,トロフィー1,トロフィー2,...
+						それ以外->special、acceptActionsにIDでfunction(){したい処理}を追加(ただし、コメント禁止)
+		achievementExplainsにIDで説明を入力
+			もし、最初からある場合はachievementFirstにID:0で追加、それ以外は任意のタイミングでachievement[ID]=0;achievementWork[ID]=0;を実行
+			そのあと、任意の条件を満たしたか判断し、achievement[ID]=1;を実行。
+			判断用に変数作るなら、achievementCountに追加するように
+
+
+オブジェクト追加方法
+	IDを決める(他と被らないように)
+	Gambling/Objectsに画像を追加
+	objectNameにIDで名前を追加
+	objectImgにIDで画像のソースを追加
+		報酬などで買い物画面に -> addBuyMenuItemで追加(DisplayBuyMenu.js) gambleに追加
+		報酬などで直接 -> (addBuyMenuItemで追加、)boughtObjectsに追加(DisplayBuyMenu.js,MainGamble.html)

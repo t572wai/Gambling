@@ -1,0 +1,13 @@
+#ruleIndexDiv{
+	border: solid 2px;
+	width: 300px;
+}
+
+a{
+	text-decoration: none;
+}
+
+h1{
+	font-size: 50px;
+	text-decoration: underline;
+}

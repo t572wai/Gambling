@@ -1,0 +1,832 @@
+﻿<!DOCTYPE html>
+<html lang="jp" dir="ltr">
+	<head>
+		<!-- Access-Control-Allow-Origen: * -->
+		<meta charset="utf-8">
+		<meta name="robots" content="noindex"/>
+		<title>ギャンブルハウス</title>
+		<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="Style.css">
+		<script type="text/javascript">
+
+			var HavePlayed = 0;
+			var prize = 0;
+			var gamble;
+			var money = 0;
+			var MenuBool = 0;
+			var playMenu;
+			var objectMenu;
+			var buyMenu;
+			var buyMenuItem;
+			var buyMenuSize;
+			var buyMenuSizeDefault;
+			var achievementMenu;
+			var soldout = 0;
+			var BGM = "none";
+			// var BGMNum = 5;
+			var BoughtBGM;
+			var BoughtTheme;
+			var isCustomBGM = "";
+			var arePlaying = 0;
+			var NumGameOver = 0;
+			var loan = 0;
+			var latched=0;
+
+			var boughtGamesFirst = new Array();
+			boughtGamesFirst.push("game:BlackJack");
+			boughtGamesFirst.push("game:HighAndLow");
+			boughtGamesFirst.push("theme:Nomal");
+			boughtGamesFirst.push("theme:Black");
+			boughtGamesFirst.push("bgm:none");
+
+			var boughtGames = JSON.stringify(boughtGamesFirst);
+			boughtGames = JSON.parse(boughtGames);
+
+			var gameName = {
+				HighAndLow: "ハイ＆ロー",
+				BlackJack: "ブラックジャック",
+				SpanishBlackJack: "スパニッシュブラックジャック",
+				Poker: "ポーカー"
+			};
+
+
+			// var achievement = {
+			// 	HavePlayedEver: 0,
+			// 	HavePlayedHAL: 0,
+			// 	HavePlayedBJ: 0,
+			// 	// HavePlayedPoker: 0,
+			// 	// HavePlayedSBJ: 0,
+			// 	// AllBGM: 0,
+			// 	// AllTheme: 0,
+			// 	HaveChangedTheme: 0,
+			// 	HaveChangedBGM: 0
+			// };
+
+
+
+			let theme = "Nomal";
+
+			var achievementWin;
+
+			// console.log(achievement);
+
+			// function AchievementUp() {
+			// 	window.open("./Achievement/achievement.html","window1","width=300,height=300");
+			// }
+
+			// function loadAchievementWin() {
+			// 	achievementWin = window.open("./Achievement/achievement.html","window1","width=300,height=300");
+			// 	setTimeout("achievementWin.setAchievement(achievement)", 5000);
+			// }
+
+			window.onload = function(){
+				let from = new Date();
+				// document.getElementById('achievementDummy').innerHTML = achievement;
+				setCss(theme);
+				displayMoney();
+				addLoadEventListener();
+				addResetEventListener();
+				loadBuyMenu();
+				loadObjectMenu();
+				loadAchievementMenu();
+				loadPlayMenu();
+				setCheckGetAchievementDialog();
+				addRuleEventListener();
+
+				// openDataLoadDialog();
+				setTimeout(function () {
+					openDataLoadDialog();
+					let to = new Date();
+					// console.log(new Date().getTime()-fp.getTime()+'ms');
+					console.log(to.getTime()-from.getTime()+'ms');
+				},0);
+
+				// $(window).keypress(function (event) {
+				// 	if(event.keyCode==37){
+				//
+				// 	}
+				// });
+
+				// addPlayEventListener();
+			}
+		</script>
+
+		<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" src="./jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+		<link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.theme.css">
+		<!-- <script type="text/javascript" src="./Sortable-master/st/app.js"></script>
+		<script type="text/javascript" src="./Sortable-master/st/prettify/prettify.js"></script>
+		<script type="text/javascript" src="./Sortable-master/Sortable.js"></script> -->
+		<!-- <script type="text/javascript" src="jquery-1.4.2.js"></script> -->
+		<!-- <script type="text/javascript" src="ui/jquery-ui-1.8.12.custom.min.js"></script> -->
+
+
+
+		<!-- <script type="text/javascript" src="./Achievement/loadAchievement.js"></script> -->
+		<!-- <script type="text/javascript" src="AchievementDummy.js"></script> -->
+
+		<link rel="stylesheet" href="./jquery-ui-1.12.1.custom/jquery-ui.min.css">
+		<audio loop id="allBGM" autoplay preload="none"></audio>
+	</head>
+	<body style="color:"+getColor(theme,1,)+";">
+		<!-- <h1>ギャンブルハウス</h1> -->
+		<h1 id="logo"><img src="./Setting/LogoBlack.png" style="height:64px"></h1>
+		<!-- <img src="./cardsPictures/torannpu-illust1.png"> -->
+
+		<form class="selctedGamle" >
+
+		</form>
+
+
+		<input type="text" name="userName" value="ID" id="userName">
+
+		<div id="saveButtonDiv">
+			<button type="button" name="saveButton" id="saveButton">保存</button>
+		</div>
+
+		<div id="LoadButtonDiv">
+			<button type="button" name="LoadButton" id="LoadButton">読み込みまたはデータ作成</button>
+		</div>
+
+		<div id="ResetButtonDiv">
+			<button type="button" name="ResetButton" id="ResetButton">リセット</button>
+		</div>
+
+		<div id="moneyDiv"></div>
+
+		<div id="rule">
+		<!-- <button type="botton" name="ruleButton" id="ruleButton">ルール</button> -->
+		<button id="RuleButton">？</a>
+		</div>
+
+		<span id='noCover'>
+			<div id="SwitchButtonDiv">
+				<span id="SwitchPlayMenuButton" onclick="moveToPlayMenu();" class="tabSelect">プレイ画面</span>
+				<span class="tab">・</span>
+				<span id="SwitchBuyMenuButton" onclick="moveToBuyMenu();" class="tab">購入画面 </span>
+				<span class="tab">・</span>
+				<span id="SwitchAchievementMenuButton" onclick="moveToAchievementMenu();" class="tab">トロフィー画面 </span>
+				<span class="tab">・</span>
+				<span id="SwitchObjectMenuButton" onclick="moveToObjectMenu();" class="tab">オブジェクト画面</span>
+				<span name="SwitchMinus" id="SwitchMinusButton" class="SwitchButton">&#8249;</span>
+				<span name="button" id="SwitchPlusButton" class="SwitchButton">&#8250;</span>
+			</div>
+
+		<!-- <div id="WholeMenu"> -->
+			<div id="Menu">
+				<div id="PlayMenu" class="Menus">
+
+				</div>
+				<div id="BuyMenu" class="Menus">
+
+				</div>
+			<!-- <div id="buyReport" class="report">
+			</div> -->
+				<div id="AchievementMenu" class="Menus">
+
+				</div>
+			<!-- <div id="achievementReport" class="report">
+			</div> -->
+				<div id="ObjectMenu" class="Menus">
+
+				</div>
+			<!-- <div id="objectReport" class="report">
+			</div> -->
+
+			<!--
+			<div id="selectGambleDiv">
+			<select class="selectGamble" name="selectGamble" size="2" id="selectGamble">
+			<option value="BlackJack">ブラックジャック</option>
+			<option value="HighAndLow">ハイ&ロー</option>
+			</select>
+
+			<div id="joker">
+				ジョーカーを使う
+					<label id="joker__label">
+						<input type="checkbox" id="joker__input"/>
+						<span id="joker__content"></span>
+						<span id="joker__circle"></span>
+					</label>
+			</div>
+
+			</div>
+			<div id="playButton">
+			<button type="button" name="PlayButton" id="PlayButton">遊ぶ</button>
+			</div>
+			<div id="MainMenu">
+			</div>
+		-->
+
+
+		</div>
+	</span>
+
+		<div id="report"></div>
+
+		<!-- </div> -->
+
+		<div id="retryDialog" title="リトライ" class="Dialog">
+			リトライしますか?
+			<!--
+			<div>
+				<label>
+					<button type="button" name="retryButton" id="RetryButton">リトライ</button>
+				</label>
+				<label>
+					<button type="button" name="NotRetryButton" id="NotRetryButton">キャンセル</button>
+				</label>
+			</div>
+		-->
+		</div>
+
+		<div id="doResetDialog" title="リセット" class="Dialog">
+			本当にリセットしますか？
+			<span id="takeCare">注意:データは戻りません</span>
+		</div>
+
+		<div class="Dialog" id="checkGetAchievementDialog" title="獲得">
+			新しいトロフィーを獲得しました<br>
+			トロフィー画面に移動しますか？
+		</div>
+
+		<div class="Dialog" id="jankenDialog" title="じゃんけん">
+			じゃんけん
+		</div>
+
+		<div class="Dialog" id="jankenResultDialog" title="じゃんけん結果">
+			じゃんけん結果:<span id="jankenResult"></span>
+			<div id="jankenResultTe">
+
+			</div>
+		</div>
+
+		<div class="Dialog" id="chooseTurn" title="順番選択">
+			先攻or後攻
+		</div>
+
+		<div class="Dialog" id='gameover' title='ゲームオーバー'>
+			ゲームオーバー
+		</div>
+
+		<div class="Dialog" id="Really" title="確認">
+			<span id='selectingGame'></span>を始めます。<br>いいですか？
+		</div>
+
+		<div class="Dialog" id="DataLoad" title="GambleHouse">
+			データを作成、またはロードします<br>
+		<!--	onclick="document.getElementById('FirstDataLoad').value='';$(this).attr('onclick','')"-->
+			<input type="text" id="FirstDataLoad" value="ID" onclick="document.getElementById('FirstDataLoad').value='';$(this).attr('onclick','')">
+		</div>
+
+		<div class="Dialog helpDialog" id='RuleMenu'>
+			<div class="breadcrumbs">
+				メインメニュー
+			</div><br>
+			●ヘルプメニュー<p>
+			<ul>
+				<li><a class='ToSiteHelp'>このサイトについて</a></li>
+				<li><a class='ToGameHelp'>ゲームについて</a></li>
+			</ul></p>
+		</div>
+
+		<div class="Dialog helpDialog" id='SiteHelp'>
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				このサイトについて
+			</div><br>
+			●このサイトについて
+			<p>本サイトは色々な賭け事を体験することができるサイトです。<br>
+			IDはブラウザ毎管理されています<br><span id="tyu-i">※実際の賭博は法律に基づき行ってください</span>
+			<ul>
+				<li><a class='ToPlayHelp'>プレイ画面</a></li>
+				<li><a class="ToBuyHelp">購入画面</a></li>
+				<li><a class="ToAchievementHelp">トロフィー画面</a></li>
+				<li><a class="ToObjectHelp">オブジェ画面</a></li>
+			</ul></p>
+			<div id="copyright"><span style="color:white">後援:山口貴様</span><br>音楽:魔王魂様・MusMus様<br></div>
+		</div>
+
+		<div class="Dialog helpDialog" id='PlayHelp'>
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class='ToSiteHelp'>このサイトについて</a> >
+				プレイ画面について
+			</div><br>
+			●プレイ画面について<p>
+			プレイ画面では、ゲーム内通貨を使い賭け事をすることができます。<br>
+			他にも、サイト全体のテーマ変更や、BGM変更も可能です。</p>
+		</div>
+		<div class="Dialog helpDialog" id='BuyHelp'>
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class='ToSiteHelp'>このサイトについて</a> >
+				購入画面について
+			</div><br>
+			●購入画面について<p>
+			購入画面では、ゲーム内通貨を使って、いろいろなものを購入することができます。<br>
+			一部商品は選択することでプレビュー表示できます。</p>
+		</div>
+		<div class="Dialog helpDialog" id='AchievementHelp'>
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class='ToSiteHelp'>このサイトについて</a> >
+				トロフィー画面について
+			</div><br>
+			●トロフィー画面について<p>
+			トロフィー画面では、獲得したトロフィーを閲覧することができます。<br>
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id='ObjectHelp'>
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class='ToSiteHelp'>サイトについて</a> >
+				オブジェ画面について
+			</div><br>
+			●オブジェ画面について<p>
+				オブジェ画面では、購入したオブジェを見ることができます。
+			</p>
+		</div>
+
+		<div class="Dialog helpDialog" id='GameHelp'>
+			<div class="breadcrumbs">
+				<a class="ToMainHelp">メインメニュー</a> >
+				ゲームについて
+			</div><br>
+			●ゲームについて<p>
+			<ul id='GamesHelp'>
+				<li><a class="ToMainRuleHelp">ゲーム全体のルール</a></li>
+				<li><a class="ToBlackJackHelp">ブラックジャックについて</a></li>
+				<li><a class="ToHighAndLowHelp">ハイ&ローについて</a></li>
+				<li><a class="ToPokerHelp">ポーカーについて</a></li>
+			</ul></p>
+		</div>
+
+		<div class="Dialog helpDialog" id="MainRuleHelp">
+			<div class="breadcrumbs">
+				<a class="ToMainHelp">メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				ゲーム全体のルール
+			</div><br>
+			●ゲーム全体のルール<p>
+			ジョーカーはスイッチによって切り替えできます。<br>
+			スートの強さはスペード>ハート>ダイヤ>クラブの順になっています<br>
+			賞金などが、小数の場合、切り上げとなります。
+		</p>
+		</div>
+
+		<div class="Dialog helpDialog" id='BlackJackHelp'>
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				ブラックジャックについて
+			</div><br>
+			●ブラックジャック
+			<p>ブラックジャックはカードの合計値を21に近づけるゲームです。<br>
+				しかし、21を超えると"バスト"となり、負けてしまいます。
+				<ul>
+					<li><a class="ToBJMainHelp">基本的なルールについて</a></li>
+					<li><a class="ToBJHitHelp">ヒットについて</a></li>
+					<li><a class="ToBJStandHelp">スタンドについて</a></li>
+					<li><a class="ToBJDoubleDownHelp">ダブルダウンについて</a></li>
+					<li><a class="ToBJSurrenderHelp">サレンダーについて</a></li>
+					<li><a class="ToBJJokerHelp">ジョーカーの扱いについて</a></li>
+				</ul>
+			</p>
+		</div>
+
+		<div class="Dialog helpDialog" id="BJMainHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToBlackJackHelp">ブラックジャックについて</a> >
+				基本的なルール
+			</div><br>
+			●基本的なルールについて<p>
+				Aは1か11の好きなほうとして数え、10,J,Q,Kは10と数え、それ以外は普通に数えます。<br>
+				Aと10点札の2枚で21になることを(ナチュラル)ブラックジャックと呼び最強の手です。<br>
+				<br>
+				ディーラーは最初の一枚をオープンしなくてはいけません。これをアップカードとよびます。<br>
+				ディーラーは16以下の時は必ずヒットしなければならず、17以上になると、必ずスタンドしなくてはいけません。<br>
+				これらのディーラーのルールがブラックジャックにおける鍵です。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="BJHitHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToBlackJackHelp">ブラックジャックについて</a> >
+				ヒットについて
+			</div><br>
+			●ヒットについて
+			<p>
+				カードを一枚引くことです。<br>
+				まだ、21点を超えないと思ったら、ヒットします。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="BJStandHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToBlackJackHelp">ブラックジャックについて</a> >
+				スタンドについて
+			</div><br>
+			●スタンドについて
+			<p>
+				ヒットをやめ、勝負します。<br>
+				賞金は
+				ブラックジャックで勝つと掛け金の2.5倍、<br>それ以外で勝つと、2倍、ドローは1倍です。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="BJDoubleDownHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToBlackJackHelp">ブラックジャックについて</a> >
+				ダブルダウンについて
+			</div><br>
+			●ダブルダウンについて
+			<p>
+				ダブルダウンは、掛け金を2倍にして一枚引いてスタンドするものです。<br>
+				ヒットする前にしかできません。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="BJSurrenderHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToBlackJackHelp">ブラックジャックについて</a> >
+				サレンダーについて
+			</div><br>
+			●サレンダーについて
+			<p>
+				サレンダーは、もう無理だと思ったら、掛け金を半分にして、やめるものです。<br>
+				ヒットする前にしかできません。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="BJJokerHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToBlackJackHelp">ブラックジャックについて</a> >
+				ジョーカーの扱い
+			</div><br>
+			●ジョーカーの扱いについて
+			<p>
+				ジョーカーを引くと、その時点で21点となります。
+			</p>
+		</div>
+
+		<div class="Dialog helpDialog" id='HighAndLowHelp'>
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				 ハイ&ローについて
+			</div><br>
+			●ハイ&ローについて
+			<p>
+				今出ているカードより次のカードが大きいか小さいかというゲームです。<br>
+				1回成功するごとに1.5倍になります。
+				<ul>
+					<li><a class="ToHALHighHelp">ハイについて</a></li>
+					<li><a class="ToHALLowHelp">ローについて</a></li>
+					<li><a class="ToHALJokerHelp">ジョーカーの扱いについて</a></li>
+				</ul>
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="HALHighHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToHighAndLowHelp">ハイ&ローについて</a> >
+				ハイについて
+			</div><br>
+			●ハイについて
+			<p>
+				今のカードより、次のカードが大きいと思うならハイを選びます。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="HALLowHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToHighAndLowHelp">ハイ&ローについて</a> >
+				ローについて
+			</div><br>
+			●ローについて
+			<p>
+				今のカードより、次のカードが大きいと思うならローを選びます。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="HALJokerHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToHighAndLowHelp">ハイ&ローについて</a> >
+				ジョーカーの扱い
+			</div><br>
+			●ジョーカーの扱いについて
+			<p>
+				ジョーカーが出た場合は、ハイ、ロー、どちらを選んだかに関係なく成功です。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id='PokerHelp'>
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				ポーカーについて
+			</div><br>
+			●ポーカーについて
+			<p>
+				5枚のカードをいくつか交換するということを繰り返し、相手より強い役をつくるゲームです。<br>
+				<ul>
+					<li><a class="ToPMedicineHelp">役について</a></li>
+					<li><a class="ToPChangeHelp">交換について</a></li>
+					<li><a class="ToPStopHelp">ストップについて</a></li>
+					<li><a class="ToPJokerHelp">ジョーカーの扱いについて</a></li>
+				</ul>
+			</p>
+		</div>
+
+		<div class="Dialog helpDialog" id="PMedicineHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				役について
+			</div><br>
+			●役について
+			<p>
+				役は強いほうから順に、
+				<ol>
+					<li><a class="ToFiveCardHelp">ファイブカード</a></li>
+					<li><a class="ToRoyalStraightFlashHelp">ロイヤルストレートフラッシュ</a></li>
+					<li><a class="ToStraightFlashHelp">ストレートフラッシュ</a></li>
+					<li><a class="ToFourCardHelp">フォーカード</a></li>
+					<li><a class="ToFullHouseHelp">フルハウス</a></li>
+					<li><a class="ToFlashHelp">フラッシュ</a></li>
+					<li><a class="ToStraightHelp">ストレート</a></li>
+					<li><a class="ToThreeCardHelp">スリーカード</a></li>
+					<li><a class="ToTwoPairHelp">ツーペア</a></li>
+					<li><a class="ToOnePairHelp">ワンペア</a></li>
+					<li><a class="ToBUTAHelp">ブタ</a></li>
+				</ol>
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="FiveCardHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				<a class="ToPMedicineHelp">役について</a> >
+				ファイブカード
+			</div><br>
+			●ファイブカード
+			<p>
+				５枚すべて同じ値である状態。<br>
+				ジョーカーが入っていないとできない。<br>
+				つまり、二人ともファイブカードは有り得ない。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="RoyalStraightFlashHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				<a class="ToPMedicineHelp">役について</a> >
+				ロイヤルストレートフラッシュ
+			</div><br>
+			●ロイヤルストレートフラッシュ
+			<p>
+				ストレートフラッシュのうち、10,J,Q,K,Aのものをいう。<br>
+				どちらもストレートフラッシュなら、スートで勝敗が決まる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="StraightFlashHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				<a class="ToPMedicineHelp">役について</a> >
+				ストレートフラッシュ
+			</div><br>
+			●ストレートフラッシュ
+			<p>
+				ストレートとフラッシュ両方の状態。<br>
+				どちらもストレートフラッシュなら、カードの最大値で勝敗が決まる。<br>
+				それでも決まらないなら、スートで勝敗が決まる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="FourCardHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				<a class="ToPMedicineHelp">役について</a> >
+				フォーカード
+			</div><br>
+			●フォーカード
+			<p>
+				４枚１組のペアができている状態。<br>
+				どちらもフォーカードなら、ペアのカードの値で勝敗が決まる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="FullHouseHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				<a class="ToPMedicineHelp">役について</a> >
+				フルハウス
+			</div><br>
+			●フルハウス
+			<p>
+				３枚1組のペアと２枚1組のペアができている状態。<br>
+				どちらもフルハウスなら、３枚ペアの値で勝敗が決まる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="FlashHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				<a class="ToPMedicineHelp">役について</a> >
+				フラッシュ
+			</div><br>
+			●フラッシュ
+			<p>
+				カードのスートが全て同じ状態。<br>
+				どちらもフラッシュなら、スートで勝敗が決まる。<br>
+				それでも決まらないなら、カードの最大値で勝敗が決まる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="StraightHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				<a class="ToPMedicineHelp">役について</a> >
+				ストレート
+			</div><br>
+			●ストレート
+			<p>
+				カードの値が4,5,6,7,8のように全て連なっている状態。<br>
+				Aと2は繋がらない。KとAは繋がる。<br>
+				どちらもストレートならカードの最大値で勝敗が決まる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="ThreeCardHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				<a class="ToPMedicineHelp">役について</a> >
+				スリーカード
+			</div><br>
+			●スリーカード
+			<p>
+				３枚１組のペアができている状態。<br>
+				どちらもスリーカードなら、ペアのカードの値で勝敗が決まる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="TwoPairHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				<a class="ToPMedicineHelp">役について</a> >
+				ツーペア
+			</div><br>
+			●ツーペア
+			<p>
+				２組、２枚1組のペアができている状態。<br>
+				どちらもツーペアなら、二つの組のうち、大きいほうの値によって勝敗が決まる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="OnePairHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				<a class="ToPMedicineHelp">役について</a> >
+				ワンペア
+			</div><br>
+			●ワンペア
+			<p>
+				一組だけ２枚一組のペアができている状態。<br>
+				どちらもワンペアなら、ペアとなっているカードの値で勝敗が決まる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="BUTAHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				<a class="ToPMedicineHelp">役について</a> >
+				ブタ
+			</div><br>
+			●ブタ
+			<p>
+				なにも揃っていない状態。<br>
+				どちらもブタなら、持っているカードの最大値で勝敗決まる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="PChangeHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				交換について
+			</div><br>
+			●交換について
+			<p>
+				先に、手札の中から交換したいものを選択、<br>その後そのカードが捨てられて、新たにその分カードが引かれる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="PStopHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				ストップについて
+			</div><br>
+			●ストップについて
+			<p>
+				どちらかがストップすると、<br>もう片方は、最後に１回交換するか選び、<br>その後、お互いの値を比較して勝敗が決まる。
+			</p>
+		</div>
+		<div class="Dialog helpDialog" id="PJokerHelp">
+			<div class="breadcrumbs">
+				<a class='ToMainHelp'>メインメニュー</a> >
+				<a class="ToGameHelp">ゲームについて</a> >
+				<a class="ToPokerHelp">ポーカーについて</a> >
+				ジョーカーの扱い
+			</div><br>
+			●ジョーカーの扱いについて
+			<p>
+				ポーカーで、ジョーカーは任意のカードとして働く。
+				値は、A,2,...,10,J,Q,K<br>
+				スートは、スペード,ハート,ダイヤ,クラブ<br>
+				どれとして数えてもいい。
+			</p>
+		</div>
+
+		<script type="text/javascript" src="Cards.js"></script>
+		<script type="text/javascript" src="SaveData.js"></script>
+		<script type="text/javascript" src="LoadData.js"></script>
+		<script type="text/javascript" src="Switch.js"></script>
+		<script type="text/javascript" src="Buy.js"></script>
+		<script type="text/javascript" src="Rule.js"></script>
+		<script type="text/javascript" src="Play.js"></script>
+		<script type="text/javascript" src="Money.js"></script>
+		<script type="text/javascript" src="IsReally.js"></script>
+
+		<script type="text/javascript" src="./HighAndLow/HighAndLow.js"></script>
+		<script type="text/javascript" src="./HighAndLow/LowAction.js"></script>
+		<script type="text/javascript" src="./HighAndLow/HighAction.js"></script>
+		<script type="text/javascript" src="./HighAndLow/ExitHAL.js"></script>
+
+		<script type="text/javascript" src="./BlackJack/BlackJack.js"></script>
+		<script type="text/javascript" src="./BlackJack/HitAction.js"></script>
+		<script type="text/javascript" src="./BlackJack/StandAction.js"></script>
+		<script type="text/javascript" src="./BlackJack/DoubleDownAction.js"></script>
+		<script type="text/javascript" src="./BlackJack/ExitBJ.js"></script>
+		<script type="text/javascript" src="./BlackJack/SurrenderAction.js"></script>
+
+		<script type="text/javascript" src="./SpanishBlackJack/SpanishBlackJack.js"></script>
+		<script type="text/javascript" src="./SpanishBlackJack/HitAction.js"></script>
+		<script type="text/javascript" src="./SpanishBlackJack/StandAction.js"></script>
+		<script type="text/javascript" src="./SpanishBlackJack/DoubleDownAction.js"></script>
+		<script type="text/javascript" src="./SpanishBlackJack/ExitSBJ.js"></script>
+		<script type="text/javascript" src="./SpanishBlackJack/SurrenderAction.js"></script>
+
+		<script type="text/javascript" src="./Poker/ChangeCard.js"></script>
+		<script type="text/javascript" src="./Poker/CheckPoint.js"></script>
+		<script type="text/javascript" src="./Poker/Poker.js"></script>
+		<script type="text/javascript" src="./Poker/Janken.js"></script>
+		<script type="text/javascript" src="./Poker/JankenResult.js"></script>
+		<script type="text/javascript" src="./Poker/ChooseTurn.js"></script>
+		<script type="text/javascript" src="./Poker/ExitPoker.js"></script>
+
+		<script type="text/javascript" src="retryDialog.js"></script>
+		<script type="text/javascript" src="checkGetAchievementDialog.js"></script>
+		<script type="text/javascript" src="TempDialog.js"></script>
+		<script type="text/javascript" src="GameOverDialog.js"></script>
+		<script type="text/javascript" src="DataLoadFirstDialog.js"></script>
+
+		<script type="text/javascript" src="Theme.js"></script>
+		<script type="text/javascript" src="BGM.js"></script>
+		<script type="text/javascript" src="DisplayObjectMenu.js"></script>
+		<script type="text/javascript" src="DisplayPlayMenu.js"></script>
+		<script type="text/javascript" src="DisplayBuyMenu.js"></script>
+		<script type="text/javascript" src="DisplayAchievementMenu.js"></script>
+		<script type="text/javascript" src="Reset.js"></script>
+
+		<script type="text/javascript" src="./CssOnJavascript/Buttons.js"></script>
+		<script type="text/javascript" src="./CssOnJavascript/Backgrounds.js"></script>
+		<script type="text/javascript" src="./CssOnJavascript/The Colors.js"></script>
+		<script type="text/javascript" src="./CssOnJavascript/Function.js"></script>
+		<script type="text/javascript" src="./CssOnJavascript/MainCss.js"></script>
+
+	</body>
+</html>

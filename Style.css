@@ -1,0 +1,363 @@
+﻿body{
+	width: 400%;
+	overflow-x: hidden;
+}
+
+
+h1{
+	/* font-size: 50px;
+	text-decoration: underline; */
+	width: 400px;
+}
+a{
+	text-decoration: none;
+}
+
+a:hover{
+	text-decoration: underline;
+}
+
+button,select{
+	border-radius: 3px;
+	margin: 2px;
+}
+
+/* #achievementDummy{
+	display: none;
+} */
+
+#doResetDialog{
+	display: none;
+}
+
+#retryDialog{
+	display: none;
+}
+
+#takeCare{
+	color: red;
+}
+/*** iOS ***/
+#joker__label {
+	width: 40px;
+	position: relative;
+	display: inline-block;
+}
+#joker__content {
+	display: block;
+	cursor: pointer;
+	position: relative;
+	border-radius: 30px;
+	height: 20px;
+overflow: hidden;
+}
+#joker__content:before {
+	content: "";
+	display: block;
+	position: absolute;
+	width: calc(100% - 3px);
+	height: calc(100% - 3px);
+	top: 0;
+	left: 0;
+	border: 1.5px solid #E5E5EA;
+	border-radius: 30px;
+	background-color: #fff;
+}
+#joker__content:after {
+	content: "";
+	display: block;
+	position: absolute;
+	background-color: transparent;
+	width: 0;
+	height: 0;
+	top: 50%;
+	left: 50%;
+	border-radius: 30px;
+	-webkit-transition: all .3s;
+		 -moz-transition: all .3s;
+			-ms-transition: all .3s;
+			 -o-transition: all .3s;
+					transition: all .3s;
+}
+#joker__input {
+	display: none;
+}
+
+#joker__circle {
+	display: block;
+	top: 1px;
+	left: 1px;
+	position: absolute;
+	-webkit-box-shadow: 0 2px 6px #999;
+					box-shadow: 0 2px 6px #999;
+	width: 17px;
+	height: 17px;
+	-webkit-border-radius: 20px;
+					border-radius: 20px;
+	background-color: #fff;
+	-webkit-transition: all .3s;
+		 -moz-transition: all .3s;
+			-ms-transition: all .3s;
+			 -o-transition: all .3s;
+					transition: all .3s;
+}
+#joker__input:checked ~ #joker__circle {
+	left: 21px;
+}
+
+#joker__input:checked ~ #joker__content:after {
+	background-color: rgb(42, 189, 215);
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+#Menu{
+	float: none;
+	display: block;
+	/* min-height: 300px; */
+	/* min-height: 50px; */
+	/* height: auto; */
+	/* float: left; */
+	height: 500px;
+	width: 100%;
+	overflow: hidden;
+	/* margin: 0 auto; */
+	transition: transform 1s ease-in-out 0s;
+-moz-transition: -moz-transform 1s ease-in-out 0s;
+-webkit-transition: -webkit-transform 1s ease-in-out 0s;
+ position: relative;
+ clear: left;
+}
+.Menus{
+	/* float: none; */
+	/* float: inherit; */
+	margin-top: 10px;
+	width: 25%;
+	/* opacity: .1; */
+	/* transition: opacity .3s; */
+	display: inline-block;
+	/* white-space: nowrap; */
+	position: absolute;
+	padding-left: 1px;
+	padding-right: 1px;
+}
+
+#PlayMenu{
+	top:0px;
+	left: 0%;
+}
+#BuyMenu{
+	top:0px;
+	left: 25%;
+}
+#AchievementMenu{
+	top: 0px;
+	left: 50%;
+}
+#ObjectMenu{
+	top:0px;
+	left: 75%;
+}
+/* #playReport{
+	left: 0%;
+} */
+/* #buyReport{
+	left: 25%;
+} */
+/* #achievementReport{
+	left: 50%;
+} */
+/* #objectReport{
+	left: 75%;
+} */
+
+.moveToBuyMenu {
+		transform: translateX(-25%);
+		-moz-transform: translateX(-25%);
+		-webkit-transform: translateX(-25%);
+}
+
+.moveToAchievementMenu {
+		transform: translateX(-50%);
+		-moz-transform: translateX(-50%);
+		-webkit-transform: translateX(-50%);
+}
+
+.moveToPlayMenu {
+		transform: translateX(0px);
+		-moz-transform: translateX(0px);
+		-webkit-transform: translateX(0px);
+}
+
+.moveToObjectMenu {
+		transform: translateX(-75%);
+		-moz-transform: translateX(-75%);
+		-webkit-transform: translateX(-75%);
+}
+
+.achievementOne{
+	text-align: center;
+	display: inline-block;
+	border-radius: 5px;
+	border: 2px solid;
+	word-break: break-all;
+	width: 200px;
+	/* height: auto; */
+	margin: 5px;
+	top: 0px;
+	position: relative;
+}
+
+#achiTitle{
+	position: absolute;
+	/* text-align: center; */
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+
+.achiPicture{
+	display: block;
+	height: auto;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	margin: auto;
+	/* transform: translate(25%,25%); */
+	/* flex: 0 1 auto; */
+}
+
+.achiPictureToButtons{
+	margin-top: 0px;
+	color: black;
+	font-weight: 2px;
+}
+
+.achiButtons{
+	margin-bottom: 5px;
+	/* line-height: 1.5;
+	height: 90px; */
+}
+
+.achiImg{
+	display: block;
+	position: relative;
+	/* display: flex; */
+	height: 130px;
+}
+
+#achievementMenu{
+	/* text-align: center; */
+	position: relative;
+}
+
+.Dialog{
+	display: none;
+}
+
+.objectOne{
+	position: relative;
+	top:0px;
+	display: inline-block;
+	text-align: center;
+	word-break: break-all;
+	border: solid 2px;
+	border-radius: 5px;
+	margin: 5px;
+}
+
+#report{
+	position: fixed;
+	right: 100px;
+	bottom: 0px;
+}
+
+.SwitchButton:hover{
+	cursor: pointer;
+}
+
+.SwitchButton{
+	font-size: 16px;
+	font-weight: bold;
+	margin-left: 2px;
+	margin-right: 3px;
+}
+
+#SwitchMinusButton{
+	margin-left: 10px;
+}
+
+#SwitchButtonDiv{
+	font-size: 0;
+}
+
+.tabSelect{
+	font-size: 16px;
+	width: auto;
+	padding: 0px;
+	margin: 0 auto;
+	display: inline-block;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.tab{
+	font-size: 16px;
+	width: auto;
+	padding: 0px;
+	margin: 0 auto;
+	display: inline-block;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.selectOption::before{
+	content: '●';
+}
+
+/* .selectOption{
+	color: blue;
+} */
+
+.noSelectOption::before{
+	content: none;
+}
+
+.selectedP{
+	border: solid 2px blue;
+}
+
+/* option:selected{
+	background-color: none;
+} */
+
+#RuleButton{
+	font-weight: bold;
+	/* border: solid 2px;
+	border-radius: 4px; */
+	position: fixed;
+	top: 100px;
+	right: 70px;
+	z-index: 10;
+}
+
+.breadcrumbs,#copyright,#tyu-i{
+	font-size: 13px;
+}
+
+#copyright{
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+}
+
+.menuTitle{
+	font-size: 20px;
+}
+
+.Dialog > a{
+	color: black;
+}

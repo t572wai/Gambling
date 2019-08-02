@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="jp" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>ルール</title>
+		<link rel="stylesheet" href="styleOfRule.css" type="text/css">
+		<script type="text/javascript" src="../jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" src="../Cards.js"></script>
+		<script type="text/javascript">
+		var cards = new Cards(1,1);
+		console.log("aaaa");
+		$(document).on('click', '#pickCard', function() {
+			var card = '.' + cards.getCard();
+			// document.getElementById('Cards').innerHTML = '<img src="' + card + '">';
+			$('#Card').attr('src',card);
+			// console.log(cards.usedCard);
+			// console.log(card);
+		});
+		</script>
+	</head>
+	<body>
+			<h1>ルール説明</h1>
+		<div id="ruleIndexDiv">
+			<ol>
+				<li><a href="#intro">本サイトについて</a></li>
+				<li><a href="#baseRule">共通のルール</a></li>
+				<li><a href="#Joker">ジョーカーの扱いについて</a></li>
+				<li><a href="#HighAndLow">ハイ&ロー</a></li>
+				<li><a href="#BlackJack">ブラックジャック</a></li>
+			</ol>
+		</div>
+		<div id="MainRule">
+			<h2 id="intro">本サイトについて</h2>
+			<p>本サイトは色々な賭け事を体験することができるサイトです。<br>
+				 IDのところに利用する、または利用しているIDを入れ、読み込みボタンを押してください。<br>
+				 <br>
+				 切り替えボタンで遊ぶ画面か買う画面か選べます。<br>
+				 プレイ画面では、ゲーム内通貨を使い賭け事をすることができます。<br>
+				 買う画面では、プレイ画面で手に入れたゲーム内通貨を使って、新しいゲームや、BGMを買うことができます。<br>
+				 <br>
+				 <button type="button" name="pickCard" id="pickCard">トランプ</button>
+				 <div id="Cards"><img id="Card"></div>
+				 音楽：魔王魂様・MusMus様<div style="color:white">後援 尊敬すべき山口貴大先生(大嘘)</div>
+			</p>
+			<h2 id="baseRule">共通のルール</h2>
+			<p>スートの強さは、スペード＞ハート＞ダイヤ＞クラブの順になっています。<br>
+				 <br>
+				 本サイトには、一部、ローカルルールが採用されています。
+			</p>
+			<h2 id="Joker">ジョーカーの扱いについて</h2>
+			<p>ジョーカーを使うかどうかは、プレイ画面のON,OFFスイッチによって選択できます。<br>
+				 ハイ＆ローでは、ジョーカーがでると、High、Low関係なく、あたりとなります。<br>
+				 ブラックジャックでは、ジョーカーが出た時点で21点となり、勝ちです。
+			</p>
+			<h2 id="HighAndLow">ハイ&ロー</h2>
+			<p>ハイ＆ローは次のカードの値が今の値より大きいか小さいかを当てるゲームです。<br>
+				 一度当たる度に、もらえるお金が1.5倍になります。<br>
+				 しかし、外すと、かけていたお金を失います。<br>
+				 また、一度にかけられる金額には上限が存在し、""より多い値はかけることができません。
+			</p>
+			<h2 id="BlackJack">ブラックジャック</h2>
+			<p>ブラックジャックはカードの合計値を21に近づけるゲームです。<br>
+				 しかし、21を超えると"バスト"となり、負けてしまいます。<br>
+				 10,J,Q,Kは10と数えられ、Aは1か11の好きなほうとして数えます。ほかの数字札はそのままです。<br>
+				 <br>
+				 "ヒット"でもう一枚、"スタンド"で引くのをやめます。<br>
+				 "ダブルダウン"は最初の2枚のところで、あと一枚引くだけで勝てると思ったら、掛け金を2倍にして、一回だけ引き、スタンドします。<br>
+				 "サレンダー"は最初の2枚のところで、勝てないと判断したら、掛け金の半分をもらって勝負をやめます。<br>
+				 Aと10点札の2枚で21になることを(ナチュラル)ブラックジャックと呼び、最も強い手です。<br>
+				 (ナチュラル)ブラックジャックで勝つと、2.5倍、それ以外で勝つと、2倍、ドローは1倍です。<br>
+				 <br>
+				 ディーラーは最初の一枚をオープンしなくてはいけません。これをアップカードとよびます。<br>
+				 ディーラーは16以下の時は必ずヒットしなければならず、17以上になると、必ずスタンドしなくてはいけません。<br>
+				 これらのディーラーのルールがブラックジャックにおける鍵です。
+			</p>
+		</div>
+	</body>
+</html>
