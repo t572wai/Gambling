@@ -95,7 +95,7 @@ function NextCardsHAL(){
 
 		setTimeout(function () {
 			setCss(theme);
-		},100);
+		},150);
 }
 /*
 function getNowCardsValue(){
