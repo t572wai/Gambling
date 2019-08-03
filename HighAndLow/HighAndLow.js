@@ -61,7 +61,7 @@ function PlayHighAndLow(latch1){
 	setTimeout(function () {
 		// console.log("llll");
 		setCss(theme);
-	},10);
+	},100);
 	// return '<img src="' + card + '" id="imgOfCard"/>'
 
 };
