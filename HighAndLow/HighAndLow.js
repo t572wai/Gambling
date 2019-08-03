@@ -93,6 +93,7 @@ function NextCardsHAL(){
 		// 	setCss(theme);
 		// },10);
 
+		console.log("a");
 		setTimeout(function () {
 			setCss(theme);
 			console.log("a");
