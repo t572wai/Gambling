@@ -95,6 +95,7 @@ function NextCardsHAL(){
 
 		setTimeout(function () {
 			setCss(theme);
+			console.log("a");
 		},1000);
 }
 /*
