@@ -53,7 +53,6 @@ function Buy(){
 															break;
 			case 'Poker':achievement['HavePlayedPoker']=0;
 										achievementWork['HavePlayedPoker']=0;
-										// ruleGamesText += '<li><a class="ToPokerHelp">ポーカーについて</a></li>';
 										break;
 			default:
 		}
