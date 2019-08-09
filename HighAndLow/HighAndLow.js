@@ -61,7 +61,7 @@ function PlayHighAndLow(latch1){
 	setTimeout(function () {
 		// console.log("llll");
 		setCss(theme);
-	},100);
+	},200);
 	// return '<img src="' + card + '" id="imgOfCard"/>'
 
 };
@@ -97,7 +97,7 @@ function NextCardsHAL(){
 		setTimeout(function () {
 			setCss(theme);
 			console.log("a");
-		},100);
+		},200);
 }
 /*
 function getNowCardsValue(){
