@@ -15,8 +15,6 @@ function LoadData(){
 	if(localStorage.getItem($('#userName').val()) != null){
 		var getJson = localStorage.getItem($('#userName').val());
 		var settingData = JSON.parse(getJson);
-		// console.log(settingData);
-		// console.log(getJson);
 		HavePlayed = 1;
 		if(getJson && settingData.value){
 			// addMoney(50);
